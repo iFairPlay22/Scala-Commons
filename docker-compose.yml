@@ -1,0 +1,133 @@
+version: '3.8'
+
+services:
+
+  cassandra:
+    image: cassandra:latest
+    ports:
+      - "9042:9042"
+    environment:
+      - CASSANDRA_CLUSTER_NAME=datacenter1
+
+  cassandra-init:
+    image: cassandra:latest
+    depends_on:
+      - cassandra
+    volumes:
+      - ./database/src/main/resources/cassandra-init.cql:/cassandra-init.cql
+    entrypoint:
+      - bash
+      - -c
+      - |
+        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
+        
+        echo "CREATE KEYSPACE production WITH replication = {'class':'SimpleStrategy', 'replication_factor' : 1};" >> data-init.cql
+        echo "" >> data-init.cql
+        echo "USE production;" >> data-init.cql
+        echo "" >> data-init.cql
+        cat cassandra-init.cql >> data-init.cql
+        cat data-init.cql
+        
+        cqlsh cassandra < data-init.cql
+
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    ports:
+      - "2181:2181"
+    container_name: zookeeper
+    environment:
+      - ZOOKEEPER_CLIENT_PORT=2181
+      - ZOOKEEPER_TICK_TIME=2000
+
+  broker:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - "9092:9092"
+    container_name: broker
+    depends_on:
+      - zookeeper
+    environment:
+      - KAFKA_BROKER_ID=1
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://broker:9092
+      - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
+
+  broker-init:
+    image: confluentinc/cp-kafka:latest
+    depends_on:
+      - broker
+    entrypoint: [ '/bin/sh', '-c' ]
+    command: |
+      "
+      # blocks until kafka is reachable
+      kafka-topics --bootstrap-server broker:9092 --list
+      
+      echo -e 'Creating kafka topics'
+      kafka-topics --bootstrap-server broker:9092 --create --if-not-exists --topic vehicles --replication-factor 1 --partitions 1
+      
+      echo -e 'Successfully created the following topics:'
+      kafka-topics --bootstrap-server broker:9092 --list
+      "
+
+  vehicles-api:
+    image: vehicles-api:${VERSION}
+    ports:
+      - "8080:8080"
+    networks:
+      - default
+    environment:
+      - VEHICLES_API_HOST=0.0.0.0
+      - VEHICLES_API_PORT=8080
+      - DATABASE_CONTACT_POINT=cassandra:9042
+      - DATABASE_KEYSPACE=production
+    entrypoint:
+      - bash
+      - -c
+      - |
+        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
+        /opt/docker/bin/vehicles-api
+    depends_on:
+      - cassandra
+      - cassandra-init
+
+  broker-producer:
+    image: vehicles-broker-producer:${VERSION}
+    networks:
+      - default
+    environment:
+      - BROKER_BOOTSTRAP_SERVERS=broker:9092
+      - BROKER_VEHICLES_TOPIC=vehicles
+      - BROKER_SCHEDULER_INITIAL_DELAY=5 seconds
+      - BROKER_SCHEDULER_REFRESH_DELAY=1 minute
+
+    entrypoint:
+      - bash
+      - -c
+      - |
+        while ! bash -c "echo > /dev/tcp/broker/9092" 2> /dev/null; do sleep 1; done
+        /opt/docker/bin/vehicles-broker-producer
+    depends_on:
+      - broker
+      - broker-init
+
+  broker-consumer:
+    image: vehicles-broker-consumer:${VERSION}
+    networks:
+      - default
+    environment:
+      - BROKER_BOOTSTRAP_SERVERS=broker:9092
+      - BROKER_VEHICLES_TOPIC=vehicles
+      - DATABASE_CONTACT_POINT=cassandra:9042
+      - DATABASE_KEYSPACE=production
+    entrypoint:
+      - bash
+      - -c
+      - |
+        while ! bash -c "echo > /dev/tcp/cassandra/9042" 2> /dev/null; do sleep 1; done
+        while ! bash -c "echo > /dev/tcp/broker/9092" 2> /dev/null; do sleep 1; done
+        /opt/docker/bin/vehicles-broker-consumer
+    depends_on:
+      - cassandra
+      - cassandra-init
+      - broker
+      - broker-init
