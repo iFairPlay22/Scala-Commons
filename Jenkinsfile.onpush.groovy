@@ -1,8 +1,8 @@
 pipeline {
     // https://github.com/sbt/docker-sbt
     agent { docker {
-        image 'ebouquet/images/scala:latest'
-        args  '--net="ebouquet/jenkins-network"'
+        image 'ewenbouquet/jenkins-img-scala:latest'
+        args  '--net="ewenbouquet/jenkins-network"'
     } }
     environment {
         VEHICLES_API_HOST               = '0.0.0.0'

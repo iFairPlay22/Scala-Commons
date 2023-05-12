@@ -2,7 +2,7 @@
 lazy val global = (project in file("."))
   .settings(defaultSettings)
   .settings(
-    name := "commons-project-root",
+    name := "commons-root",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= globalLibraryDependencies,
     Test / parallelExecution := false,
@@ -13,15 +13,25 @@ lazy val global = (project in file("."))
 lazy val commons = (project in file("commons"))
   .settings(defaultSettings)
   .settings(
-    name := "commons-project-commons",
+    name := "commons-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies)
 
 // Default settings
-lazy val defaultSettings = Seq(organization := "ebouquet")
+lazy val defaultSettings = Seq(
+  organization := "ewenbouquet",
+  publishTo := {
+    val nexus = sys.env("NEXUS_BASE_URL")
+    if (isSnapshot.value)
+      Some("snapshots" at nexus + "/repository/maven-snapshots/")
+    else
+      Some("releases" at nexus + "/repository/maven-releases/")
+  },
+  credentials += Credentials(Path.userHome / ".sbt" / ".ewenbouquet_credentials"))
 
 // Docker plugin settings
-lazy val dockerSettings = Seq(dockerBaseImage := "openjdk:11", dockerUsername := Some("ebouquet"))
+lazy val dockerSettings =
+  Seq(dockerBaseImage := "openjdk:11", dockerUsername := Some("ewenbouquet"))
 
 // Library dependencies
 lazy val projectLibraryDependencies =
