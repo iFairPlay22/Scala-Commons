@@ -1,10 +1,42 @@
-# Project
+# Commons
 
-Simple project with Scala, Akka, Cassandra, Kafka and Circe. I divided the project into 6 modules to have a better scalability, maintenance and performance.
+Simple project with Scala, Akka, Cassandra, Kafka and Circe.
 
 ## Setup the environment
 
-Generate the docker images:
+### Requirements
+
+    export NEXUS_BASE_URL=https://$NEXUS_HOST_URL
+
+### Code Style
+
+Format the code:
+
+    sbt scalafmt
+
+### Artifacts
+
+Generate the artifacts locally:
+
+    sbt publishLocal
+
+Generate the artifacts images publicly:
+
+    sbt publish
+
+### Docker images
+
+Generate the docker images locally:
+
+    sbt docker:publishLocal
+
+Generate the docker images publicly:
+
+    sbt docker:publish
+
+### Launch the app
+
+Generate the docker images locally:
 
     sbt docker:publishLocal
 
@@ -43,3 +75,4 @@ Get available vehicles from tile_id (ex: tile_id=1_1):
 Count available vehicles per tile:
 
     curl --location --request GET 'hhttp://127.0.0.1:8080/api/tiles/usecase/vehicleCount'
+
