@@ -33,7 +33,7 @@ trait _HttpServerSystem extends _WithActorSystem {
           Http()
             .newServerAt(SERVER_HOST, SERVER_PORT)
             .bind(Route.seal(routes))
-            .andThen(_ => logger.info(f"HTTP server was launched!")))
+            .andThen(_ => logger.info(f"HTTP server is launched!")))
 
         server.get.map(_ => Done)
     }
