@@ -18,8 +18,8 @@ abstract class _BrokerConsumerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
 
   private val logger: Logger = Logger(getClass)
 
+  // Broker configurations
   val topic: String;
-
   val callbacks: Set[(K, V) => Future[Done]]
 
   private val settings: ConsumerSettings[K, V] =
@@ -70,13 +70,13 @@ abstract class _BrokerConsumerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
       case None =>
         throw new _NotYetStartedBrokerConsumerException()
       case Some(c) =>
-        if (!stopped) {
+        if (stopped) {
+          throw new _AlreadyStoppedBrokerConsumerException()
+        } else {
           logger.info("Shutting down broker consumer")
           c.shutdown()
             .andThen(_ => stopped = true)
             .andThen(_ => logger.info("Broker consumer is down"))
-        } else {
-          throw new _AlreadyStoppedBrokerConsumerException()
         }
     }
 

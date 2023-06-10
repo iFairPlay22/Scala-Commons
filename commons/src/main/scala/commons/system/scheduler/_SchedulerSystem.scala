@@ -12,13 +12,10 @@ abstract class _SchedulerSystem extends _WithActorSystem {
 
   private val logger: Logger = Logger(getClass)
 
-  // Settings
+  // Scheduler configuration
+  private var scheduler: Option[Cancellable] = None
   val initialDelay: Duration
   val refreshDelay: Duration
-
-  // Scheduler
-  private var scheduler: Option[Cancellable] = None
-
   val action: Unit => Future[Done]
 
   def startScheduler(): Future[Done] =
@@ -27,7 +24,7 @@ abstract class _SchedulerSystem extends _WithActorSystem {
         throw new _AlreadyStartedSchedulerException()
       case None =>
         logger.info(
-          f"Starting producer scheduler with initialDelay=$initialDelay s and refreshDelay=$refreshDelay")
+          f"Starting producer scheduler with initialDelay = ${initialDelay}s and refreshDelay = ${refreshDelay}s")
 
         scheduler = Some(
           system.scheduler
@@ -56,18 +53,18 @@ abstract class _SchedulerSystem extends _WithActorSystem {
       case None =>
         throw new _NotStartedSchedulerException()
       case Some(s) =>
-        if (!stopped) {
+        if (stopped) {
+          throw new _AlreadyStoppedSchedulerException()
+        } else {
           logger.info("Stopping scheduler")
           if (s.cancel()) {
-            logger.info("Stopping scheduler")
+            logger.info("Scheduler stopped")
             stopped = true
             Future.successful(Done)
           } else {
             logger.info("Unable to stop scheduler")
             throw new _UnableToStopSchedulerException()
           }
-        } else {
-          throw new _AlreadyStoppedSchedulerException()
         }
     }
 

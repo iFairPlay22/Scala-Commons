@@ -18,6 +18,7 @@ abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
 
   private val logger: Logger = Logger(getClass)
 
+  // Broker configurations
   val topic: String
 
   private val settings: ProducerSettings[K, V] =
@@ -65,13 +66,13 @@ abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
       case None =>
         throw new _NotYetStartedBrokerProducerException()
       case Some(p) =>
-        if (!stopped) {
+        if (stopped) {
+          throw new _AlreadyStoppedBrokerProducerException()
+        } else {
           logger.info("Stopping broker producer")
           p.close()
             .andThen(_ => stopped = true)
             .andThen(_ => logger.info(f"Broker producer was stopped!"))
-        } else {
-          throw new _AlreadyStoppedBrokerProducerException()
         }
     }
 

@@ -13,19 +13,19 @@ trait _CassandraSystem extends _WithActorSystem with _WithCassandraSystem {
 
   private val logger: Logger = Logger(getClass)
 
-  implicit final val session: CassandraSession =
+  implicit override final val cassandraSession: CassandraSession =
     CassandraSessionRegistry.get(system).sessionFor(CassandraSessionSettings())
 
   protected var stopped: Boolean = false;
 
   def stopCassandra(): Future[Done] =
-    if (!stopped) {
+    if (stopped) {
+      throw new _AlreadyStoppedCassandraSessionException()
+    } else {
       logger.info("Stopping cassandra session")
-      session
+      cassandraSession
         .close(executor)
         .andThen(_ => stopped = true)
         .andThen(_ => logger.info("Cassandra session was stopped!"))
-    } else {
-      throw new _AlreadyStoppedCassandraSessionException()
     }
 }

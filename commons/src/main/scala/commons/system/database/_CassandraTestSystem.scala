@@ -42,17 +42,17 @@ trait _CassandraSystemForTests extends _CassandraSystem {
 object _CassandraSystemForTests {
 
   private def resetKeyspace(keyspace: String, schema: String)(implicit
-      session: CassandraSession,
+      cassandraSession: CassandraSession,
       executor: ExecutionContext): Future[Done] =
     dropKeyspace(keyspace)
-      .flatMap(_ => session.executeDDL(createKeyspaceIfNotExistsQuery(keyspace)))
-      .flatMap(_ => session.executeDDL(useKeyspaceQuery(keyspace)))
-      .flatMap(_ => session.executeDDL(schema))
+      .flatMap(_ => cassandraSession.executeDDL(createKeyspaceIfNotExistsQuery(keyspace)))
+      .flatMap(_ => cassandraSession.executeDDL(useKeyspaceQuery(keyspace)))
+      .flatMap(_ => cassandraSession.executeDDL(schema))
 
   private def dropKeyspace(keyspace: String)(implicit
-      session: CassandraSession,
+      cassandraSession: CassandraSession,
       executor: ExecutionContext): Future[Done] =
-    session.executeDDL(dropKeyspaceIfExistsQuery(keyspace))
+    cassandraSession.executeDDL(dropKeyspaceIfExistsQuery(keyspace))
 
   private def createKeyspaceIfNotExistsQuery(keyspace: String): String =
     f"""

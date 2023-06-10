@@ -11,7 +11,7 @@ import scala.concurrent.Future
 trait _CassandraRepositorySystem extends _WithActorSystem with _WithCassandraSystem {
 
   private def createSource(stmt: String, params: List[Any]): Source[Row, NotUsed] =
-    CassandraSource(stmt, params.map(e => e.asInstanceOf[AnyRef]): _*)(session)
+    CassandraSource(stmt, params.map(e => e.asInstanceOf[AnyRef]): _*)(cassandraSession)
 
   protected def queryToEmptyResult(stmt: String, params: List[Any]): Future[Done] =
     createSource(stmt, params)

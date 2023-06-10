@@ -14,8 +14,8 @@ trait _HttpServerSystem extends _WithActorSystem {
 
   private val logger: Logger = Logger(getClass)
 
-  def routes: Route
-
+  // Server configurations
+  val routes: Route
   private val SERVER_HOST: String = config.getString("api.server-host")
   private val SERVER_PORT: Int = config.getInt("api.server-port")
 
@@ -35,7 +35,7 @@ trait _HttpServerSystem extends _WithActorSystem {
             .bind(Route.seal(routes))
             .andThen(_ => logger.info(f"HTTP server was launched!")))
 
-        Future.successful(Done)
+        server.get.map(_ => Done)
     }
 
   private var stopped: Boolean = false
@@ -45,7 +45,9 @@ trait _HttpServerSystem extends _WithActorSystem {
       case None =>
         throw new _NotStartedServerException()
       case Some(s) =>
-        if (!stopped) {
+        if (stopped) {
+          throw new _AlreadyStoppedServerException()
+        } else {
           logger.info(f"Stopping HTTP server")
 
           s.flatMap {
@@ -55,8 +57,6 @@ trait _HttpServerSystem extends _WithActorSystem {
           }.recover {
             throw new _UnableToStartServerException()
           }
-        } else {
-          throw new _AlreadyStoppedServerException()
         }
     }
 

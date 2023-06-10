@@ -1,7 +1,5 @@
 package commons.utils
 
-import scala.collection.mutable
-
 trait _RandomUtils {
   private val rand = new scala.util.Random
 
@@ -18,7 +16,7 @@ trait _RandomUtils {
   def randomBool(): Boolean =
     rand.nextBoolean()
 
-  def randomString(length: Int) = {
+  def randomString(length: Int): String = {
     if (length < 0)
       throw new IllegalArgumentException("length must be greater than 0")
     rand.alphanumeric.take(length).mkString

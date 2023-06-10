@@ -13,6 +13,7 @@ trait _HttpControllerSystem extends _WithActorSystem with Directives {
 
   private val logger: Logger = Logger(getClass)
 
+  // Controller configurations
   val routes: Route
 
   private def toJson[R: Encoder](k: Future[R]): Future[String] =

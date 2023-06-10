@@ -14,7 +14,8 @@ trait _ActorSystem extends _System with _WithActorSystem {
   private val logger: Logger = Logger(getClass)
 
   // Actor
-  final implicit val system: ActorSystem = ActorSystem(validSystemName)
+  logger.info(f"Starting actor system $validSystemName")
+  final override implicit val system: ActorSystem = ActorSystem(validSystemName)
 
   private lazy val validSystemName = {
     val tmp = getClass.getName

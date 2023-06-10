@@ -21,7 +21,7 @@ lazy val commons = (project in file("commons"))
 lazy val defaultSettings = Seq(
   organization := "ewenbouquet",
   publishTo := {
-    val nexus = sys.env("NEXUS_BASE_URL")
+    val nexus = sys.env.getOrElse("NEXUS_BASE_URL", "http://localhost:8081")
     if (isSnapshot.value)
       Some("snapshots" at nexus + "/repository/maven-snapshots/")
     else
