@@ -53,7 +53,7 @@ lazy val projectLibraryDependencies =
     }
 
     val logback = new {
-      val logbackClassicVersion = "1.4.5"
+      val logbackClassicVersion = "1.4.7"
 
       val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackClassicVersion % Runtime
 
@@ -61,7 +61,7 @@ lazy val projectLibraryDependencies =
     }
 
     val circe = new {
-      val circeVersion = "0.14.3"
+      val circeVersion = "0.14.5"
 
       val circeCore = "io.circe" %% "circe-core" % circeVersion
       val circeGeneric = "io.circe" %% "circe-generic" % circeVersion
@@ -72,9 +72,9 @@ lazy val projectLibraryDependencies =
 
     val akkaHttp = new {
 
-      val akkaHttpVersion = "10.4.0"
+      val akkaHttpVersion = "10.5.0"
       val akkaHttpCirceVersion = "1.39.2"
-      val akkaTestKitVersion = "2.7.0"
+      val akkaTestKitVersion = "2.8.0"
 
       val akkaHttp = "com.typesafe.akka" %% "akka-http" % akkaHttpVersion
       val akkaTestKit = "com.typesafe.akka" %% "akka-testkit" % akkaTestKitVersion
@@ -86,7 +86,7 @@ lazy val projectLibraryDependencies =
 
     val akkaStream = new {
 
-      val akkaStreamVersion = "2.7.0"
+      val akkaStreamVersion = "2.8.0"
       val akkaStreamKafkaVersion = "4.0.0"
 
       val akkaStream = "com.typesafe.akka" %% "akka-stream" % akkaStreamVersion
@@ -110,7 +110,7 @@ lazy val projectLibraryDependencies =
     }
 
     val kafka = new {
-      val kafkaVersion = "3.3.2"
+      val kafkaVersion = "3.4.0"
 
       val kafkaClients = "org.apache.kafka" % "kafka-clients" % kafkaVersion
       val kafkaStreams = "org.apache.kafka" % "kafka-streams" % kafkaVersion
