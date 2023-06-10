@@ -3,6 +3,7 @@ package commons.system.database
 import akka.Done
 import akka.stream.alpakka.cassandra.CassandraSessionSettings
 import akka.stream.alpakka.cassandra.scaladsl.{CassandraSession, CassandraSessionRegistry}
+import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.Logger
 import commons.exceptions._AlreadyStoppedCassandraSessionException
 import commons.system.actor._WithActorSystem
@@ -12,6 +13,11 @@ import scala.concurrent.Future
 trait _CassandraSystem extends _WithActorSystem with _WithCassandraSystem {
 
   private val logger: Logger = Logger(getClass)
+  private val cassandraConfig = ConfigFactory.load("datastax-java-driver.basic")
+
+  logger.info(
+    f"Starting cassandra session referring to ${cassandraConfig.getStringList("contact-points")}, using keyspace ${cassandraConfig
+        .getString("session-keyspace")} and datacenter ${cassandraConfig.getString("datacenter")}")
 
   implicit override final val cassandraSession: CassandraSession =
     CassandraSessionRegistry.get(system).sessionFor(CassandraSessionSettings())
