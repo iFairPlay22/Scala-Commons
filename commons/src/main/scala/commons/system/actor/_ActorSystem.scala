@@ -2,7 +2,7 @@ package commons.system.actor
 
 import akka.Done
 import akka.actor.{ActorSystem, Terminated}
-import com.typesafe.config.Config
+import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.Logger
 import commons.exceptions._AlreadyStoppedActorException
 import commons.system._System
@@ -15,7 +15,8 @@ trait _ActorSystem extends _System with _WithActorSystem {
 
   // Actor
   logger.info(f"Starting actor system $validSystemName")
-  final override implicit val system: ActorSystem = ActorSystem(validSystemName)
+  final override implicit val system: ActorSystem =
+    ActorSystem(validSystemName, ConfigFactory.load())
 
   private lazy val validSystemName = {
     val tmp = getClass.getName
