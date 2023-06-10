@@ -13,11 +13,11 @@ import scala.concurrent.Future
 trait _CassandraSystem extends _WithActorSystem with _WithCassandraSystem {
 
   private val logger: Logger = Logger(getClass)
-  private val cassandraConfig = ConfigFactory.load("datastax-java-driver.basic")
+  private val cassandraConfig = ConfigFactory.load().getConfig("datastax-java-driver.basic")
 
   logger.info(
     f"Starting cassandra session referring to ${cassandraConfig.getStringList("contact-points")}, using keyspace ${cassandraConfig
-        .getString("session-keyspace")} and datacenter ${cassandraConfig.getString("datacenter")}")
+        .getString("session-keyspace")} and datacenter ${cassandraConfig.getString("load-balancing-policy.local-datacenter")}")
 
   implicit override final val cassandraSession: CassandraSession =
     CassandraSessionRegistry.get(system).sessionFor(CassandraSessionSettings())
