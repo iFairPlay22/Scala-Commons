@@ -53,11 +53,14 @@ lazy val projectLibraryDependencies =
     }
 
     val logback = new {
-      val logbackClassicVersion = "1.4.7"
+      val logbackVersion = "1.4.7"
+      val akkaSlfjVersion = "2.8.0"
 
-      val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackClassicVersion % Runtime
+      val logbackClassic = "ch.qos.logback" % "logback-classic" % logbackVersion
+      val akkaSlf4j = "com.typesafe.akka" %% "akka-slf4j" % akkaSlfjVersion
 
-      val all = Seq(logbackClassic)
+      val all =
+        Seq(logbackClassic, akkaSlf4j)
     }
 
     val circe = new {
