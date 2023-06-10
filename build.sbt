@@ -21,7 +21,8 @@ lazy val commons = (project in file("commons"))
 lazy val defaultSettings = Seq(
   organization := "ewenbouquet",
   publishTo := {
-    val nexus = sys.env.getOrElse("NEXUS_BASE_URL", "http://localhost:8081")
+    val nexus =
+      sys.env.getOrElse("NEXUS_BASE_URL", "https://ewenbouquet-nexus-public-url.loca.lt")
     if (isSnapshot.value)
       Some("snapshots" at nexus + "/repository/maven-snapshots/")
     else
@@ -31,7 +32,7 @@ lazy val defaultSettings = Seq(
 
 // Docker plugin settings
 lazy val dockerSettings =
-  Seq(dockerBaseImage := "openjdk:11", dockerUsername := Some("ewenbouquet"))
+  Seq(dockerUsername := Some("ewenbouquet"), dockerBaseImage := "openjdk:11")
 
 // Library dependencies
 lazy val projectLibraryDependencies =
