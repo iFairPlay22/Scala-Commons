@@ -19,7 +19,7 @@ abstract class _BrokerConsumerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
   private val logger: Logger = Logger(getClass)
 
   // Broker configurations
-  val topic: String;
+  private val topic: String = config.getString("broker_consumer.topic")
   val callbacks: Set[(K, V) => Future[Done]]
 
   private val settings: ConsumerSettings[K, V] =

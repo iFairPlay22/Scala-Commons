@@ -14,8 +14,10 @@ abstract class _SchedulerSystem extends _WithActorSystem {
 
   // Scheduler configuration
   private var scheduler: Option[Cancellable] = None
-  val initialDelay: Duration
-  val refreshDelay: Duration
+  private val initialDelay: Duration =
+    config.getDuration("broker_producer.scheduler.initial-delay");
+  private val refreshDelay: Duration =
+    config.getDuration("broker_producer.scheduler.refresh-delay");
   val action: Unit => Future[Done]
 
   def startScheduler(): Future[Done] =
@@ -24,7 +26,7 @@ abstract class _SchedulerSystem extends _WithActorSystem {
         throw new _AlreadyStartedSchedulerException()
       case None =>
         logger.info(
-          f"Starting producer scheduler with initialDelay = ${initialDelay}s and refreshDelay = ${refreshDelay}s")
+          f"Starting scheduler with initialDelay = ${initialDelay}s and refreshDelay = ${refreshDelay}s")
 
         scheduler = Some(
           system.scheduler

@@ -19,7 +19,7 @@ abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
   private val logger: Logger = Logger(getClass)
 
   // Broker configurations
-  val topic: String
+  private val topic: String = config.getString("broker_producer.topic")
 
   private val settings: ProducerSettings[K, V] =
     ProducerSettings(
