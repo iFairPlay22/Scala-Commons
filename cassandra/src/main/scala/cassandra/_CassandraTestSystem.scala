@@ -1,13 +1,10 @@
 package cassandra
 
 import akka.Done
-import akka.http.scaladsl.testkit.ScalatestRouteTest
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSession
 import com.typesafe.scalalogging.Logger
 import commons.exceptions._AlreadyStoppedCassandraSessionException
 import commons.testing.TestUtils
-import io.circe
-import io.circe.Decoder
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
@@ -78,7 +75,6 @@ object _CassandraSystemForTests {
 
 trait _CassandraTestSystem
     extends AnyWordSpecLike
-    with ScalatestRouteTest
     with BeforeAndAfterAll
     with BeforeAndAfterEach
     with _CassandraSystemForTests

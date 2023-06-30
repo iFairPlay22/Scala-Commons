@@ -22,7 +22,7 @@ lazy val broker = (project in file("broker"))
   .settings(
     name := "broker-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= commonsLibraryDependencies)
+    libraryDependencies ++= brokerLibraryDependencies)
   .dependsOn(commons)
 
 lazy val cassandra = (project in file("cassandra"))
@@ -30,7 +30,7 @@ lazy val cassandra = (project in file("cassandra"))
   .settings(
     name := "cassandra-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= commonsLibraryDependencies)
+    libraryDependencies ++= cassandraLibraryDependencies)
   .dependsOn(commons)
 
 lazy val http = (project in file("http"))
@@ -38,7 +38,7 @@ lazy val http = (project in file("http"))
   .settings(
     name := "http-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= commonsLibraryDependencies)
+    libraryDependencies ++= httpLibraryDependencies)
   .dependsOn(commons)
 
 lazy val scheduler = (project in file("scheduler"))
@@ -46,7 +46,7 @@ lazy val scheduler = (project in file("scheduler"))
   .settings(
     name := "scheduler-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= commonsLibraryDependencies)
+    libraryDependencies ++= schedulerLibraryDependencies)
   .dependsOn(commons)
 
 // Default settings
@@ -160,11 +160,26 @@ lazy val projectLibraryDependencies =
 lazy val commonsLibraryDependencies =
   projectLibraryDependencies.scala.all ++
     projectLibraryDependencies.logback.all ++
-    projectLibraryDependencies.akkaHttp.all ++
-    projectLibraryDependencies.akkaStream.all ++
-    projectLibraryDependencies.akkaCassandra.all ++
-    projectLibraryDependencies.circe.all ++
-    projectLibraryDependencies.kafka.all
+    projectLibraryDependencies.circe.all
 
 lazy val globalLibraryDependencies =
   commonsLibraryDependencies
+
+lazy val brokerLibraryDependencies =
+  commonsLibraryDependencies ++
+    projectLibraryDependencies.akkaStream.all ++
+    projectLibraryDependencies.kafka.all
+
+lazy val cassandraLibraryDependencies =
+  commonsLibraryDependencies ++
+    projectLibraryDependencies.akkaStream.all ++
+    projectLibraryDependencies.akkaCassandra.all
+
+lazy val httpLibraryDependencies =
+  commonsLibraryDependencies ++
+    projectLibraryDependencies.akkaHttp.all ++
+    projectLibraryDependencies.akkaStream.all
+
+lazy val schedulerLibraryDependencies =
+  commonsLibraryDependencies ++
+    projectLibraryDependencies.akkaStream.all

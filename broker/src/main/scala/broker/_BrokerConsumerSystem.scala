@@ -6,7 +6,6 @@ import akka.kafka.{ConsumerSettings, Subscriptions}
 import akka.stream.scaladsl.{Keep, Sink, Source}
 import com.typesafe.scalalogging.Logger
 import commons.actor._WithActorSystem
-import commons.serde._Serde
 import commons.exceptions.{_AlreadyStartedBrokerConsumerException, _AlreadyStoppedBrokerConsumerException, _NotYetStartedBrokerConsumerException, _UnableToLaunchBrokerConsumerException}
 import io.circe.{Decoder, Encoder}
 import org.apache.kafka.clients.consumer.ConsumerRecord

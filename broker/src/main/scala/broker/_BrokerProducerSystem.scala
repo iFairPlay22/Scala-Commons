@@ -5,7 +5,6 @@ import akka.kafka.ProducerSettings
 import akka.kafka.scaladsl.SendProducer
 import com.typesafe.scalalogging.Logger
 import commons.actor._WithActorSystem
-import commons.serde._Serde
 import commons.exceptions.{_AlreadyStartedBrokerProducerException, _AlreadyStoppedBrokerProducerException, _NotYetStartedBrokerProducerException, _UnableToProduceInBrokerException}
 import io.circe.{Decoder, Encoder}
 import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}

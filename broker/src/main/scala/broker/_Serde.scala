@@ -1,4 +1,4 @@
-package commons.serde
+package broker
 
 import io.circe.parser._
 import io.circe.syntax._
