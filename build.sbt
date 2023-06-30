@@ -13,14 +13,14 @@ lazy val global = (project in file("."))
 lazy val commons = (project in file("commons"))
   .settings(defaultSettings)
   .settings(
-    name := "commons-libs",
+    name := "commons-commons-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies)
 
 lazy val broker = (project in file("broker"))
   .settings(defaultSettings)
   .settings(
-    name := "broker-libs",
+    name := "commons-broker-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= brokerLibraryDependencies)
   .dependsOn(commons)
@@ -28,7 +28,7 @@ lazy val broker = (project in file("broker"))
 lazy val cassandra = (project in file("cassandra"))
   .settings(defaultSettings)
   .settings(
-    name := "cassandra-libs",
+    name := "commons-cassandra-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= cassandraLibraryDependencies)
   .dependsOn(commons)
@@ -36,7 +36,7 @@ lazy val cassandra = (project in file("cassandra"))
 lazy val http = (project in file("http"))
   .settings(defaultSettings)
   .settings(
-    name := "http-libs",
+    name := "commons-http-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= httpLibraryDependencies)
   .dependsOn(commons)
@@ -44,7 +44,7 @@ lazy val http = (project in file("http"))
 lazy val scheduler = (project in file("scheduler"))
   .settings(defaultSettings)
   .settings(
-    name := "scheduler-libs",
+    name := "commons-scheduler-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= schedulerLibraryDependencies)
   .dependsOn(commons)

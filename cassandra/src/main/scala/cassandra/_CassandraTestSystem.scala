@@ -3,6 +3,7 @@ package cassandra
 import akka.Done
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSession
 import com.typesafe.scalalogging.Logger
+import commons.actor._WithActorSystem
 import commons.exceptions._AlreadyStoppedCassandraSessionException
 import commons.testing.TestUtils
 import org.scalatest.wordspec.AnyWordSpecLike
@@ -79,8 +80,6 @@ trait _CassandraTestSystem
     with BeforeAndAfterEach
     with _CassandraSystemForTests
     with TestUtils {
-
-  override implicit lazy val executor: ExecutionContextExecutor = system.dispatcher
 
   override def beforeAll(): Unit = {
     super.beforeAll()

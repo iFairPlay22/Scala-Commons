@@ -2,9 +2,14 @@ package cassandra_test
 
 import cassandra._CassandraTestSystem
 import cassandra_test.model.{Person, PersonRepository}
+import commons.actor._ActorSystem
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.concurrent.ScalaFutures
-class CassandraSpecs extends _CassandraTestSystem with Matchers with ScalaFutures {
+class CassandraSpecs
+    extends _ActorSystem
+    with _CassandraTestSystem
+    with Matchers
+    with ScalaFutures {
 
   private val personRepository: PersonRepository = new PersonRepository()
 
