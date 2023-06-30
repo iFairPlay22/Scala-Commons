@@ -17,7 +17,7 @@ class PersonApiSpecs
     with ScalaFutures
     with TestUtils {
 
-  private val personsRoutes: Route = new PersonController().routes
+  private val personsRoutes: Route = Route.seal(new PersonController().routes)
 
   f"Vehicles API" should {
 
