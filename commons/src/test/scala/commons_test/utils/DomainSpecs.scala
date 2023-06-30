@@ -1,6 +1,6 @@
 package commons_test.utils
 
-import commons.utils._RandomUtils
+import commons.random._RandomUtils
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 

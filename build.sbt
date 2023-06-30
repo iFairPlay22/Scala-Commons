@@ -7,8 +7,8 @@ lazy val global = (project in file("."))
     libraryDependencies ++= globalLibraryDependencies,
     Test / parallelExecution := false,
     publish / skip := true)
-  .aggregate(commons)
-  .dependsOn(commons)
+  .aggregate(commons, broker, cassandra, http, scheduler)
+  .dependsOn(commons, broker, cassandra, http, scheduler)
 
 lazy val commons = (project in file("commons"))
   .settings(defaultSettings)
@@ -16,6 +16,38 @@ lazy val commons = (project in file("commons"))
     name := "commons-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
     libraryDependencies ++= commonsLibraryDependencies)
+
+lazy val broker = (project in file("broker"))
+  .settings(defaultSettings)
+  .settings(
+    name := "broker-libs",
+    scalaVersion := projectLibraryDependencies.scala.scalaVersion,
+    libraryDependencies ++= commonsLibraryDependencies)
+  .dependsOn(commons)
+
+lazy val cassandra = (project in file("cassandra"))
+  .settings(defaultSettings)
+  .settings(
+    name := "cassandra-libs",
+    scalaVersion := projectLibraryDependencies.scala.scalaVersion,
+    libraryDependencies ++= commonsLibraryDependencies)
+  .dependsOn(commons)
+
+lazy val http = (project in file("http"))
+  .settings(defaultSettings)
+  .settings(
+    name := "http-libs",
+    scalaVersion := projectLibraryDependencies.scala.scalaVersion,
+    libraryDependencies ++= commonsLibraryDependencies)
+  .dependsOn(commons)
+
+lazy val scheduler = (project in file("scheduler"))
+  .settings(defaultSettings)
+  .settings(
+    name := "scheduler-libs",
+    scalaVersion := projectLibraryDependencies.scala.scalaVersion,
+    libraryDependencies ++= commonsLibraryDependencies)
+  .dependsOn(commons)
 
 // Default settings
 lazy val defaultSettings = Seq(
@@ -41,11 +73,13 @@ lazy val projectLibraryDependencies =
       val scalaVersion = "2.13.10"
       val scalaLoggingVersion = "3.9.5"
       val scalaTestVersion = "3.2.15"
+      val scalaMockitoTestVersion = "3.2.10.0"
 
       val scalaLogging = "com.typesafe.scala-logging" %% "scala-logging" % scalaLoggingVersion
       val scalaTest = "org.scalatest" %% "scalatest" % scalaTestVersion
+      val scalaMockitoTest = "org.scalatestplus" %% "mockito-3-4" % scalaMockitoTestVersion % Test
 
-      val all = Seq(scalaLogging, scalaTest)
+      val all = Seq(scalaLogging, scalaTest, scalaMockitoTest)
     }
 
     val java = new {
