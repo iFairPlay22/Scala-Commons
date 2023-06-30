@@ -3,13 +3,12 @@ package cassandra
 import akka.Done
 import akka.stream.alpakka.cassandra.scaladsl.CassandraSession
 import com.typesafe.scalalogging.Logger
-import commons.actor._WithActorSystem
 import commons.exceptions._AlreadyStoppedCassandraSessionException
 import commons.testing.TestUtils
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
-import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
+import scala.concurrent.{ExecutionContext, Future}
 import scala.io.Source
 import scala.language.postfixOps
 
