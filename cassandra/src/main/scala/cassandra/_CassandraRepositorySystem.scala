@@ -17,36 +17,47 @@ trait _CassandraRepositorySystem extends _WithActorSystem with _WithCassandraSys
     CassandraSource(stmt, params.map(e => e.asInstanceOf[AnyRef]): _*)(cassandraSession)
 
   protected def queryToEmptyResult(stmt: String, params: List[Any]): Future[Done] =
-    createSource(stmt, params)
-      .runWith(Sink.ignore)
+    handle(
+      createSource(stmt, params)
+        .runWith(Sink.ignore))
 
   protected def queryToSingleResult[T](
       stmt: String,
       params: List[Any],
       castFunction: Row => T): Future[T] =
-    createSource(stmt, params)
-      .runWith(Sink.head)
-      .map(castFunction)
+    handle(
+      createSource(stmt, params)
+        .runWith(Sink.head)
+        .map(castFunction))
 
   protected def queryToOptionalSingleResult[T](
       stmt: String,
       params: List[Any],
       castFunction: Row => T): Future[Option[T]] =
-    createSource(stmt, params)
-      .runWith(Sink.headOption)
-      .map { row =>
-        if (row.nonEmpty) {
-          Some(castFunction(row.get))
-        } else {
-          None
-        }
-      }
+    handle(
+      createSource(stmt, params)
+        .runWith(Sink.headOption)
+        .map { row =>
+          if (row.nonEmpty) {
+            Some(castFunction(row.get))
+          } else {
+            None
+          }
+        })
 
   protected def queryToMultipleResult[T](
       stmt: String,
       params: List[Any],
       castFunction: Row => T): Future[Seq[T]] =
-    createSource(stmt, params)
-      .runWith(Sink.seq)
-      .map(_.map(castFunction))
+    handle(
+      createSource(stmt, params)
+        .runWith(Sink.seq)
+        .map(_.map(castFunction)))
+
+  private def handle[T](source: Future[T]): Future[T] =
+    source
+      .recover(err => {
+        err.printStackTrace()
+        throw err
+      })
 }

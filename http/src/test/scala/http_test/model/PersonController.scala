@@ -13,16 +13,14 @@ class PersonController(implicit val system: ActorSystem) extends _HttpController
     pathPrefix("api") {
       path("persons") {
         get {
-          response { () =>
-            Future.successful(Seq(PersonDTO("Philipp", 23), PersonDTO("Daniel", 56)))
-          }
+          complete(Future {
+            Seq(PersonDTO("Philipp", 23), PersonDTO("Daniel", 56))
+          })
         }
       } ~
         path("person") {
           get {
-            response { () =>
-              Future.successful(PersonDTO("Philipp", 23))
-            }
+            complete(Future { PersonDTO("Philipp", 23) })
           }
         }
     }
