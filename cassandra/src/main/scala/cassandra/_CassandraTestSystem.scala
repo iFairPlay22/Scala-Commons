@@ -11,9 +11,7 @@ import io.circe.Decoder
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
 
-import scala.concurrent.duration._
-import scala.concurrent.duration.Duration
-import scala.concurrent.{Await, ExecutionContext, ExecutionContextExecutor, Future}
+import scala.concurrent.{ExecutionContext, ExecutionContextExecutor, Future}
 import scala.io.Source
 import scala.language.postfixOps
 
@@ -87,18 +85,6 @@ trait _CassandraTestSystem
     with TestUtils {
 
   override implicit lazy val executor: ExecutionContextExecutor = system.dispatcher
-
-  def decodeResponse[T: Decoder](resp: String): T = {
-    val eitherErrorOrT = circe.jawn
-      .decode[T](resp)
-
-    eitherErrorOrT match {
-      case Right(r) => r
-      case Left(err) =>
-        failTest("Unable to decode API response")
-        throw err
-    }
-  }
 
   override def beforeAll(): Unit = {
     super.beforeAll()

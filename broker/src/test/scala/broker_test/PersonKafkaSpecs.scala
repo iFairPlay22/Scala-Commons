@@ -7,7 +7,7 @@ import org.scalatest.concurrent.Eventually.eventually
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
-class PersonKafkaTest
+class PersonKafkaSpecs
     extends AnyWordSpecLike
     with Matchers
     with BeforeAndAfterAll

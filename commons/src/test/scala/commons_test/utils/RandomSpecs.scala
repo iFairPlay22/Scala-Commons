@@ -4,7 +4,7 @@ import commons.random._RandomUtils
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpec
 
-class DomainSpecs extends AnyWordSpec with Matchers with _RandomUtils {
+class RandomSpecs extends AnyWordSpec with Matchers with _RandomUtils {
 
   "Random utils" should {
 
