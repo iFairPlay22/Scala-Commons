@@ -2,12 +2,9 @@ package db_test
 
 import akka.Done
 import db._DbTestSystem
-import db_test.model.{Person, PersonRepository, PersonTable}
+import db_test.model.{Person, PersonRepository}
 import commons.actor._ActorSystem
 import db_test.model.PersonTable.PersonData
-import org.scalatest.matchers.should.Matchers
-import org.scalatest.concurrent.ScalaFutures
-
 import slick.jdbc.H2Profile.api._
 import scala.concurrent.Future
 
