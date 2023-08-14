@@ -7,8 +7,8 @@ lazy val global = (project in file("."))
     libraryDependencies ++= globalLibraryDependencies,
     Test / parallelExecution := false,
     publish / skip := true)
-  .aggregate(commons, broker, cassandra, http, scheduler)
-  .dependsOn(commons, broker, cassandra, http, scheduler)
+  .aggregate(commons, broker, db, http, scheduler)
+  .dependsOn(commons, broker, db, http, scheduler)
 
 lazy val commons = (project in file("commons"))
   .settings(defaultSettings)
@@ -25,12 +25,12 @@ lazy val broker = (project in file("broker"))
     libraryDependencies ++= brokerLibraryDependencies)
   .dependsOn(commons)
 
-lazy val cassandra = (project in file("cassandra"))
+lazy val db = (project in file("db"))
   .settings(defaultSettings)
   .settings(
-    name := "commons-cassandra-libs",
+    name := "commons-db-libs",
     scalaVersion := projectLibraryDependencies.scala.scalaVersion,
-    libraryDependencies ++= cassandraLibraryDependencies)
+    libraryDependencies ++= dbLibraryDependencies)
   .dependsOn(commons)
 
 lazy val http = (project in file("http"))
@@ -132,18 +132,19 @@ lazy val projectLibraryDependencies =
       val all = Seq(akkaStream, akkaStreamKafka)
     }
 
-    val akkaCassandra = new {
-      val akkaStreamAlpakkaCassandraVersion = "5.0.0"
-      val esriGeometryApiVersion = "2.2.4"
-      val tinkerpopTinkerGraphGremlinVersion = "3.6.2"
+    val akkaDb = new {
+      val slickVersion = "3.4.1"
+      val akkaStreamAlpakkaSlickVersion = "5.0.0"
+      val dbConnectorVersion = "8.0.33"
+      val postgresVersion = "42.5.4"
 
-      val akkaStreamAlpakkaCassandra =
-        "com.lightbend.akka" %% "akka-stream-alpakka-cassandra" % akkaStreamAlpakkaCassandraVersion
-      val esriGeometryApi = "com.esri.geometry" % "esri-geometry-api" % esriGeometryApiVersion
-      val tinkerpopTinkerGraphGremlin =
-        "org.apache.tinkerpop" % "tinkergraph-gremlin" % tinkerpopTinkerGraphGremlinVersion
+      val slick = "com.typesafe.slick" %% "slick" % slickVersion
+      val slickHikaricp = "com.typesafe.slick" %% "slick-hikaricp" % slickVersion
+      val akkaStreamAlpakkaDb =
+        "com.lightbend.akka" %% "akka-stream-alpakka-slick" % akkaStreamAlpakkaSlickVersion
+      val postgres = "org.postgresql" % "postgresql" % postgresVersion
 
-      val all = Seq(akkaStreamAlpakkaCassandra, esriGeometryApi, tinkerpopTinkerGraphGremlin)
+      val all = Seq(slick, slickHikaricp, akkaStreamAlpakkaDb, postgres)
     }
 
     val kafka = new {
@@ -170,10 +171,10 @@ lazy val brokerLibraryDependencies =
     projectLibraryDependencies.akkaStream.all ++
     projectLibraryDependencies.kafka.all
 
-lazy val cassandraLibraryDependencies =
+lazy val dbLibraryDependencies =
   commonsLibraryDependencies ++
     projectLibraryDependencies.akkaStream.all ++
-    projectLibraryDependencies.akkaCassandra.all
+    projectLibraryDependencies.akkaDb.all
 
 lazy val httpLibraryDependencies =
   commonsLibraryDependencies ++

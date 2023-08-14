@@ -5,9 +5,9 @@ abstract class _Exception(msg: String) extends Exception(msg)
 // Actor
 class _AlreadyStoppedActorException extends _Exception("Actor was already stopped...")
 
-// Cassandra
-class _AlreadyStoppedCassandraSessionException
-    extends _Exception("Cassandra session was already stopped...")
+// Db
+class _AlreadyStoppedDbSessionException
+    extends _Exception("DB session was already stopped...")
 
 // Server
 class _AlreadyStartedServerException extends _Exception("Server was already started...")

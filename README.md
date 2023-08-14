@@ -1,6 +1,6 @@
 # Commons
 
-Simple project with Scala, Akka, Cassandra, Kafka and Circe.
+Simple project with Scala, Akka, Postgres, Kafka and Circe.
 
 ## Setup the environment
 

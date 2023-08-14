@@ -11,7 +11,7 @@ pipeline {
         BROKER_BOOTSTRAP_SERVERS        = 'broker:9092'
         BROKER_SCHEDULER_INITIAL_DELAY  = '5 seconds'
         BROKER_SCHEDULER_REFRESH_DELAY  = '1 minute'
-        DATABASE_CONTACT_POINT          = 'cassandra:9042'
+        DB_URL                          = 'db:5432'
     }
     stages {
         stage('Compilation') {
