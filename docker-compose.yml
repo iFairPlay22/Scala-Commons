@@ -35,7 +35,7 @@ services:
       - postgres
     volumes:
       - ./migrations/:/flyway/sql/
-    command: -url=jdbc:postgresql://postgres:5432/db_ewen?allowPublicKeyRetrieval=true -schemas=db_ewen -user=admin -password=root -connectRetries=60 migrate
+    command: -url=jdbc:postgresql://postgres:5432/db_ewen?allowPublicKeyRetrieval=true -schemas=db_ewen -user=admin -password=root -connectRetries=60 -validateMigrationNaming=true migrate
 
   zookeeper:
     image: confluentinc/cp-zookeeper:latest

@@ -5,12 +5,13 @@ import akka.actor.Cancellable
 import com.typesafe.scalalogging.Logger
 import commons.actor._WithActorSystem
 import commons.exceptions.{_AlreadyStartedSchedulerException, _AlreadyStoppedSchedulerException, _NotStartedSchedulerException, _UnableToStopSchedulerException}
+import org.slf4j.LoggerFactory
 
 import java.time.Duration
 import scala.concurrent.Future
 abstract class _SchedulerSystem extends _WithActorSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   // Scheduler configuration
   private var scheduler: Option[Cancellable] = None

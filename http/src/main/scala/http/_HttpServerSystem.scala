@@ -3,9 +3,9 @@ package http
 import akka.Done
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.server.Route
-import com.typesafe.scalalogging.Logger
 import commons.actor._WithActorSystem
 import commons.exceptions.{_AlreadyStartedServerException, _AlreadyStoppedServerException, _NotStartedServerException, _UnableToStartServerException}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
@@ -16,7 +16,7 @@ import scala.util.{Failure, Success, Try}
  */
 trait _HttpServerSystem extends _WithActorSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   // Server configurations
   val routes: Route

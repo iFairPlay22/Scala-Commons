@@ -6,6 +6,7 @@ import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.Logger
 import commons.actor._WithActorSystem
 import commons.exceptions._AlreadyStoppedDbSessionException
+import org.slf4j.LoggerFactory
 import slick.jdbc.JdbcBackend.Database
 
 import scala.concurrent.Future
@@ -16,7 +17,7 @@ import scala.concurrent.Future
  */
 trait _DbSystem extends _WithActorSystem with _WithDbSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
   private val dbConfig = ConfigFactory.load().getConfig("db")
 
   logger.info(

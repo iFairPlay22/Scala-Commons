@@ -6,6 +6,7 @@ import commons.testing.TestUtils
 import org.scalatest.matchers.should.Matchers
 import org.scalatest.wordspec.AnyWordSpecLike
 import org.scalatest.{BeforeAndAfterAll, BeforeAndAfterEach}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 import scala.language.postfixOps
@@ -18,7 +19,7 @@ trait _DbTestSystem
     with TestUtils
     with _DbSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   def reset(): Future[Any]
 

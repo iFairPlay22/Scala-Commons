@@ -5,11 +5,12 @@ import akka.actor.{ActorSystem, Terminated}
 import com.typesafe.config.{Config, ConfigFactory}
 import com.typesafe.scalalogging.Logger
 import commons.exceptions._AlreadyStoppedActorException
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.{ExecutionContextExecutor, Future}
 trait _ActorSystem extends _WithActorSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   // Actor
   logger.info(f"Starting actor system $validSystemName")

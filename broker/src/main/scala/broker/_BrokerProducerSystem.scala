@@ -8,6 +8,7 @@ import commons.actor._WithActorSystem
 import commons.exceptions.{_AlreadyStartedBrokerProducerException, _AlreadyStoppedBrokerProducerException, _NotYetStartedBrokerProducerException, _UnableToProduceInBrokerException}
 import io.circe.{Decoder, Encoder}
 import org.apache.kafka.clients.producer.{ProducerRecord, RecordMetadata}
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 
@@ -29,7 +30,7 @@ import scala.concurrent.Future
 abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Decoder: Encoder]
     extends _WithActorSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   // Broker configurations
   private val bootstrapServer = config.getString("kafka.producer.kafka-clients.bootstrap.servers")

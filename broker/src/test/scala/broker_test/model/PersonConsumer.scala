@@ -5,13 +5,14 @@ import akka.actor.ActorSystem
 import broker._BrokerConsumerSystem
 import com.typesafe.scalalogging.Logger
 import io.circe.generic.auto._
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 
 class PersonConsumer(callback: (PersonId, Person) => Unit)(implicit val system: ActorSystem)
     extends _BrokerConsumerSystem[PersonId, Person] {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   override val callbacks: Set[(PersonId, Person) => Future[Done]] =
     Set((personId: PersonId, person: Person) => {

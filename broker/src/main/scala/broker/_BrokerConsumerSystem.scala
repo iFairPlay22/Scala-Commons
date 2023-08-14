@@ -9,6 +9,7 @@ import commons.actor._WithActorSystem
 import commons.exceptions.{_AlreadyStartedBrokerConsumerException, _AlreadyStoppedBrokerConsumerException, _NotYetStartedBrokerConsumerException, _UnableToLaunchBrokerConsumerException}
 import io.circe.{Decoder, Encoder}
 import org.apache.kafka.clients.consumer.ConsumerRecord
+import org.slf4j.LoggerFactory
 
 import scala.concurrent.Future
 
@@ -31,7 +32,7 @@ import scala.concurrent.Future
 abstract class _BrokerConsumerSystem[K >: Null: Decoder: Encoder, V >: Null: Decoder: Encoder]
     extends _WithActorSystem {
 
-  private val logger: Logger = Logger(getClass)
+  private val logger = LoggerFactory.getLogger(getClass)
 
   // Broker configurations
   private val bootstrapServer = config.getString("kafka.consumer.kafka-clients.bootstrap.servers")
