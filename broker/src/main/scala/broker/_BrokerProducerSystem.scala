@@ -14,13 +14,9 @@ import scala.concurrent.Future
 
 /**
  * System that allow to send messages of shape (key: K, value: V) in a Kafka topic
- * @param decoder$K$0
+ * @param Decoder[K]
  *   How to decode the Kafka key of the message
- * @param encoder$K$1
- *   How to decode the Kafka value of the message
- * @param decoder$V$0
- *   How to encode the Kafka key of the message
- * @param encoder$V$1
+ * @param Encoder[V]
  *   How to encode the Kafka value of the message
  * @tparam K
  *   Message key type
