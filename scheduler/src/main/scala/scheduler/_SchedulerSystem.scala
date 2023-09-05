@@ -37,13 +37,7 @@ abstract class _SchedulerSystem extends _WithActorSystem {
               () =>
                 Future
                   .successful()
-                  .andThen { _ =>
-                    logger.info("Starting data injection task in producer")
-                  }
-                  .flatMap(action)
-                  .andThen { _ =>
-                    logger.info("Ending data injection task in producer")
-                  },
+                  .flatMap(action),
               executor))
 
         Future.successful(Done)
