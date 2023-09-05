@@ -3,11 +3,12 @@ package http_test.model
 import akka.actor.ActorSystem
 import akka.http.scaladsl.server.Route
 import http._HttpControllerSystem
+import http.health._HealthCheckSystem
 import io.circe.generic.auto._
 
 import scala.concurrent.Future
 
-class PersonController(implicit val system: ActorSystem) extends _HttpControllerSystem {
+class PersonController(implicit override val system: ActorSystem) extends _HttpControllerSystem  {
 
   override val routes: Route =
     pathPrefix("api") {

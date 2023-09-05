@@ -75,25 +75,26 @@ abstract class _BrokerConsumerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
             consumerControl = Some(control)
           })
           .recover { error =>
+            isBrokerConsumerStopped = true
             error.printStackTrace()
             logger.error(f"Unable to launch broker consumer!", error)
             throw new _UnableToLaunchBrokerConsumerException()
           }
     }
 
-  private var stopped: Boolean = false
+  var isBrokerConsumerStopped: Boolean = false
 
   def stopBrokerConsumer(): Future[Done] =
     consumerControl match {
       case None =>
         throw new _NotYetStartedBrokerConsumerException()
       case Some(c) =>
-        if (stopped) {
+        if (isBrokerConsumerStopped) {
           throw new _AlreadyStoppedBrokerConsumerException()
         } else {
           logger.info("Shutting down broker consumer")
           c.shutdown()
-            .andThen(_ => stopped = true)
+            .andThen(_ => isBrokerConsumerStopped = true)
             .andThen(_ => logger.info("Broker consumer is down"))
         }
     }

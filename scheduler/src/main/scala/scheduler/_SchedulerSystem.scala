@@ -43,20 +43,20 @@ abstract class _SchedulerSystem extends _WithActorSystem {
         Future.successful(Done)
     }
 
-  private var stopped: Boolean = false
+  var isSchedulerStopped: Boolean = false
 
   def stopScheduler(): Future[Done] =
     scheduler match {
       case None =>
         throw new _NotStartedSchedulerException()
       case Some(s) =>
-        if (stopped) {
+        if (isSchedulerStopped) {
           throw new _AlreadyStoppedSchedulerException()
         } else {
           logger.info("Stopping scheduler")
           if (s.cancel()) {
-            logger.info("Scheduler stopped")
-            stopped = true
+            logger.info("Scheduler isSchedulerStopped")
+            isSchedulerStopped = true
             Future.successful(Done)
           } else {
             logger.info("Unable to stop scheduler")

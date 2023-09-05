@@ -27,15 +27,15 @@ trait _DbSystem extends _WithActorSystem with _WithDbSystem {
   implicit override final val dbSession: SlickSession =
     SlickSession.forDbAndProfile(Database.forConfig("db"), slick.jdbc.H2Profile)
 
-  protected var stopped: Boolean = false;
+  var isDbStopped: Boolean = false;
 
   def stopDb(): Future[Done] =
-    if (stopped) {
+    if (isDbStopped) {
       throw new _AlreadyStoppedDbSessionException()
     } else {
       logger.info("Stopping DB session")
       dbSession.close()
-      stopped = true
+      isDbStopped = true
       logger.info("DB session was stopped!")
       Future.successful(Done)
     }

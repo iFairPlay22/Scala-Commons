@@ -21,6 +21,16 @@ class PersonApiSpecs
 
   f"Vehicles API" should {
 
+    f"provide a valid health check" in {
+
+      Get("/health-check") ~> personsRoutes ~> check {
+
+        status.shouldEqual(StatusCodes.OK)
+        responseAs[String].shouldEqual("System healthy")
+      }
+
+    }
+
     f"return empty vehicles list" in {
 
       Get("/api/persons") ~> personsRoutes ~> check {

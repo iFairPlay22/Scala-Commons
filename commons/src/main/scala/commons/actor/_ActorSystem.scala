@@ -30,17 +30,17 @@ trait _ActorSystem extends _WithActorSystem {
     }
   }
 
-  private var stopped: Boolean = false
+  var isActorSystemStopped: Boolean = false
 
   def stopActor(): Future[Done] =
-    if (stopped) {
+    if (isActorSystemStopped) {
       throw new _AlreadyStoppedActorException()
     } else {
       logger.info("Stopping actor system")
       system
         .terminate()
-        .andThen(_ => stopped = true)
-        .andThen(_ => "Actor system is stopped!")
+        .andThen(_ => isActorSystemStopped = true)
+        .andThen(_ => "Actor system is isActorSystemStopped!")
         .map(_ => Done)
     }
 

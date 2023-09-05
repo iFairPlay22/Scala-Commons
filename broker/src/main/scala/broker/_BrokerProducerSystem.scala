@@ -57,11 +57,9 @@ abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
       case None =>
         throw new _NotYetStartedBrokerProducerException()
       case Some(p) =>
-        logger.info(f" Producing in topic $topic")
-
         p
           .send(new ProducerRecord(topic, key, value))
-          .andThen(_ => logger.info(f"Record is produced in broker!"))
+          .andThen(_ => logger.info(f"Record is produced in broker in topic $topic!"))
           .recover { error =>
             error.printStackTrace()
             logger.error(f"Failed to produce record in broker", error)
@@ -69,19 +67,19 @@ abstract class _BrokerProducerSystem[K >: Null: Decoder: Encoder, V >: Null: Dec
           }
     }
 
-  private var stopped: Boolean = false
+  var isBrokerProducerStopped: Boolean = false
 
   def stopBrokerProducer(): Future[Done] =
     producer match {
       case None =>
         throw new _NotYetStartedBrokerProducerException()
       case Some(p) =>
-        if (stopped) {
+        if (isBrokerProducerStopped) {
           throw new _AlreadyStoppedBrokerProducerException()
         } else {
           logger.info("Stopping broker producer")
           p.close()
-            .andThen(_ => stopped = true)
+            .andThen(_ => isBrokerProducerStopped = true)
             .andThen(_ => logger.info(f"Broker producer was stopped!"))
         }
     }
